@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3077/v1"
+      "url": "https://api.trugen.ai/v1"
     }
   ],
   "components": {
