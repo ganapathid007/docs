@@ -12,25 +12,14 @@
   ],
   "paths": {
     "/mcp": {
-      "post": {
-        "summary": "Execute MCP",
-        "description": "Executes MCP operation with authentication via X-API-Key.",
+      "get": {
+        "summary": "Get MCP configurations",
+        "description": "Fetches a list of available MCP configurations. Requires `X-API-Key` authentication.",
         "security": [
           {
             "apiKeyAuth": []
           }
         ],
-        "requestBody": {
-          "description": "Optional request body (currently empty).",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful MCP response",
