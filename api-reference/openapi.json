@@ -1,42 +1,39 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Avatar API",
-    "description": "API to fetch avatar information",
-    "version": "1.0.0"
+    "title": "Trugen MCP API",
+    "version": "1.0.0",
+    "description": "OpenAPI specification for MCP endpoint"
   },
   "servers": [
     {
       "url": "https://api.trugen.ai/v1"
     }
   ],
-  "components": {
-    "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-API-Key"
-      }
-    }
-  },
-  "security": [
-    {
-      "ApiKeyAuth": []
-    }
-  ],
   "paths": {
     "/mcp": {
-      "get": {
-        "summary": "Get avatar list",
-        "description": "Retrieves available avatars. Requires an `X-API-Key` header.",
+      "post": {
+        "summary": "Execute MCP",
+        "description": "Executes MCP operation with authentication via X-API-Key.",
         "security": [
           {
-            "ApiKeyAuth": []
+            "apiKeyAuth": []
           }
         ],
+        "requestBody": {
+          "description": "Optional request body (currently empty).",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "List of avatars retrieved successfully",
+            "description": "Successful MCP response",
             "content": {
               "application/json": {
                 "schema": {
@@ -46,35 +43,80 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "example": "avatar_12345"
+                        "format": "uuid",
+                        "example": "0f7b696c-ecdf-4900-addc-e7cfdbbce1c7"
                       },
                       "name": {
                         "type": "string",
-                        "example": "John Doe"
+                        "example": "Brave MCP"
                       },
-                      "profile_pic": {
+                      "description": {
                         "type": "string",
-                        "format": "uri",
-                        "example": "http://localhost:3077/uploads/avatar_12345.png"
+                        "example": "Brave MCP"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "sse"
+                      },
+                      "arguments": {
+                        "type": "string",
+                        "example": "{\"url\": \"http://ec2-18-216-51-35.us-east-2.compute.amazonaws.com:8080/sse\"}"
+                      },
+                      "cache_tools_list": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "event_messages": {
+                        "type": "string",
+                        "example": "{\"on_delay\": {\"delay\": 1, \"message\": \"I am still waiting for the information.\"}, \"on_error\": {\"message\": \"Failed to search the web for the information.\"}, \"on_start\": {\"message\": \"\"}, \"on_success\": {\"message\": \"\"}}"
+                      },
+                      "is_active": {
+                        "type": "boolean",
+                        "example": true
                       },
                       "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2025-09-29T10:15:30Z"
+                        "example": "2025-09-15T16:56:45.580326Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-09-15T16:56:45.580326Z"
                       }
-                    }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "type",
+                      "arguments",
+                      "cache_tools_list",
+                      "event_messages",
+                      "is_active",
+                      "created_at",
+                      "updated_at"
+                    ]
                   }
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized – API key missing or invalid"
+            "description": "Unauthorized – invalid API key"
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Server error"
           }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
       }
     }
   }
