@@ -44,11 +44,11 @@
             ]
           },
           {
-            "group": "Avatar",
+            "group": "MCP",
             "pages": [
-              "api-reference/avatar/create",
-              "api-reference/avatar/get",
-              "api-reference/avatar/delete"
+              "api-reference/endpoint/get",
+              "api-reference/endpoint/create",
+              "api-reference/endpoint/delete"
             ]
           }
         ]
