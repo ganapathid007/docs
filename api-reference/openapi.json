@@ -114,46 +114,74 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "description": { "type": "string" },
-                  "type": { "type": "string", "example": "MCP" },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "MCP"
+                  },
                   "arguments": {
                     "type": "array",
                     "items": {
                       "type": "object",
                       "properties": {
-                        "url": { "type": "string", "format": "uri" }
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
                       }
                     }
                   },
-                  "cache_tools_list": { "type": "boolean" },
+                  "cache_tools_list": {
+                    "type": "boolean"
+                  },
                   "event_messages": {
                     "type": "object",
                     "properties": {
                       "on_start": {
                         "type": "object",
                         "properties": {
-                          "message": { "type": "string" }
+                          "message": {
+                            "type": "string"
+                          }
                         }
                       },
                       "on_delay": {
                         "type": "object",
                         "properties": {
-                          "delay": { "type": "integer" },
-                          "message": { "type": "string" }
+                          "delay": {
+                            "type": "integer"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
                         }
                       },
                       "on_error": {
                         "type": "object",
                         "properties": {
-                          "message": { "type": "string" }
+                          "message": {
+                            "type": "string"
+                          }
                         }
                       }
                     }
                   },
-                  "is_active": { "type": "boolean" }
+                  "is_active": {
+                    "type": "boolean"
+                  }
                 },
-                "required": ["name", "description", "type", "arguments", "is_active"]
+                "required": [
+                  "name",
+                  "description",
+                  "type",
+                  "arguments",
+                  "is_active"
+                ]
               },
               "example": {
                 "name": "MCP 5",
@@ -190,12 +218,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "format": "uuid" },
-                    "name": { "type": "string" },
-                    "description": { "type": "string" },
-                    "type": { "type": "string" },
-                    "is_active": { "type": "boolean" },
-                    "created_at": { "type": "string", "format": "date-time" }
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "is_active": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
                   }
                 }
               }
@@ -206,6 +248,48 @@
           },
           "401": {
             "description": "Unauthorized - Missing or invalid API key"
+          }
+        }
+      }
+    },
+    "/mcp/{id}": {
+      "delete": {
+        "summary": "Delete MCP",
+        "description": "Deletes an MCP configuration by its ID. Requires `X-API-Key` authentication.",
+        "operationId": "deleteMCP",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the MCP configuration",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "0f7b696c-ecdf-4900-addc-e7cfdbbce1c7"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "MCP deleted successfully (no content returned)"
+          },
+          "400": {
+            "description": "Invalid MCP ID"
+          },
+          "401": {
+            "description": "Unauthorized – Missing or invalid API key"
+          },
+          "404": {
+            "description": "MCP not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
