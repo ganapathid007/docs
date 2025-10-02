@@ -13,7 +13,7 @@
   "paths": {
     "/mcp": {
       "get": {
-        "summary": "Get MCP configurations",
+        "summary": "Get MCP configurations test",
         "description": "Fetches a list of available MCP configurations. Requires `X-API-Key` authentication.",
         "security": [
           {
