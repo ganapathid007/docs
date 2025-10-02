@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://mintlify.trugen.ai/v1"
+      "url": "https://mintlify.trugen.ai:3077/v1"
     }
   ],
   "paths": {
