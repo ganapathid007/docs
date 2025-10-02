@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://silly-boats-yawn.loca.lt/v1"
+      "url": "https://api.trugen.ai/v1"
     }
   ],
   "paths": {
