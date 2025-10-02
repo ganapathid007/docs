@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.trugen.ai/v1"
+      "url": "https://cuddly-kings-mix.loca.lt/v1"
     }
   ],
   "paths": {
