@@ -13,7 +13,7 @@
   "paths": {
     "/mcp": {
       "get": {
-        "summary": "Get MCP configurations test",
+        "summary": "Get MCP configurations",
         "description": "Fetches a list of available MCP configurations. Requires `X-API-Key` authentication.",
         "security": [
           {
@@ -97,6 +97,117 @@
             "description": "Server error"
           }
         }
+      },
+      "post": {
+        "summary": "Create MCP",
+        "description": "Create a new MCP configuration.",
+        "operationId": "createMCP",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "type": { "type": "string", "example": "MCP" },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "url": { "type": "string", "format": "uri" }
+                      }
+                    }
+                  },
+                  "cache_tools_list": { "type": "boolean" },
+                  "event_messages": {
+                    "type": "object",
+                    "properties": {
+                      "on_start": {
+                        "type": "object",
+                        "properties": {
+                          "message": { "type": "string" }
+                        }
+                      },
+                      "on_delay": {
+                        "type": "object",
+                        "properties": {
+                          "delay": { "type": "integer" },
+                          "message": { "type": "string" }
+                        }
+                      },
+                      "on_error": {
+                        "type": "object",
+                        "properties": {
+                          "message": { "type": "string" }
+                        }
+                      }
+                    }
+                  },
+                  "is_active": { "type": "boolean" }
+                },
+                "required": ["name", "description", "type", "arguments", "is_active"]
+              },
+              "example": {
+                "name": "MCP 5",
+                "description": "You are a helpful assistant to MCP",
+                "type": "MCP",
+                "arguments": [
+                  {
+                    "url": "http://ec2-18-216-51-35.us-east-2.compute.amazonaws.com:8080/sse"
+                  }
+                ],
+                "cache_tools_list": true,
+                "event_messages": {
+                  "on_start": {
+                    "message": "Successfully received data."
+                  },
+                  "on_delay": {
+                    "delay": 1,
+                    "message": "Waiting for stock price data..."
+                  },
+                  "on_error": {
+                    "message": "Failed to retrieve stock price data"
+                  }
+                },
+                "is_active": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "MCP created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "type": { "type": "string" },
+                    "is_active": { "type": "boolean" },
+                    "created_at": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key"
+          }
+        }
       }
     }
   },
@@ -105,7 +216,7 @@
       "apiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "x-api-key"
+        "name": "X-API-Key"
       }
     }
   }
