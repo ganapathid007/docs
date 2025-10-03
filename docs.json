@@ -46,8 +46,10 @@
           {
             "group": "MCP",
             "pages": [
+               "api-reference/endpoint/getbyid",
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
+              "api-reference/endpoint/update",
               "api-reference/endpoint/delete"
             ]
           }
