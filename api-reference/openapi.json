@@ -292,6 +292,297 @@
             "description": "Server error"
           }
         }
+      },
+      "put": {
+        "summary": "Update MCP",
+        "description": "Updates an existing MCP configuration by its ID. Requires `X-API-Key` authentication.",
+        "operationId": "updateMCP",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the MCP configuration",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "0d585f9a-e992-42d4-bda2-9c25f2bd7eda"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "MCP"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  },
+                  "cache_tools_list": {
+                    "type": "boolean"
+                  },
+                  "event_messages": {
+                    "type": "object",
+                    "properties": {
+                      "on_start": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "on_delay": {
+                        "type": "object",
+                        "properties": {
+                          "delay": {
+                            "type": "integer"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "on_error": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "type",
+                  "arguments",
+                  "is_active"
+                ]
+              },
+              "example": {
+                "name": "MCP 3 update",
+                "description": "You are a helpful assistant to MCP",
+                "type": "MCP",
+                "arguments": [
+                  {
+                    "url": "http://ec2-18-216-51-35.us-east-2.compute.amazonaws.com:8080/sse"
+                  }
+                ],
+                "cache_tools_list": true,
+                "event_messages": {
+                  "on_start": {
+                    "message": "Successfully received data."
+                  },
+                  "on_delay": {
+                    "delay": 1,
+                    "message": "Waiting for stock price data..."
+                  },
+                  "on_error": {
+                    "message": "Failed to retrieve stock price data"
+                  }
+                },
+                "is_active": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MCP updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        }
+                      }
+                    },
+                    "cache_tools_list": {
+                      "type": "boolean"
+                    },
+                    "event_messages": {
+                      "type": "object"
+                    },
+                    "is_active": {
+                      "type": "boolean"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "401": {
+            "description": "Unauthorized – Missing or invalid API key"
+          },
+          "404": {
+            "description": "MCP not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get MCP by ID",
+        "description": "Fetch a single MCP configuration by its unique ID. Requires `X-API-Key` authentication.",
+        "operationId": "getMCPById",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier of the MCP configuration",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "0d585f9a-e992-42d4-bda2-9c25f2bd7eda"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MCP object successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "dcf04568-6bf5-40cf-bd6f-d68e4cb5b216"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "MCP 5"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "You are a helpful assistant to MCP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "MCP"
+                    },
+                    "arguments": {
+                      "type": "string",
+                      "example": "[{\"url\": \"http://ec2-18-216-51-35.us-east-2.compute.amazonaws.com:8080/sse\"}]"
+                    },
+                    "cache_tools_list": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "event_messages": {
+                      "type": "string",
+                      "example": "{\"on_delay\": {\"delay\": 1, \"message\": \"Waiting for stock price data...\"}, \"on_error\": {\"message\": \"Failed to retrieve stock price data\"}, \"on_start\": {\"message\": \"Successfully received data.\"}}"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-10-02T17:22:10.96453Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-10-02T17:22:10.96453Z"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "type",
+                    "arguments",
+                    "cache_tools_list",
+                    "event_messages",
+                    "is_active",
+                    "created_at",
+                    "updated_at"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – invalid API key"
+          },
+          "404": {
+            "description": "MCP not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
       }
     }
   },
