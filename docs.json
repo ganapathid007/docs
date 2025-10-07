@@ -44,13 +44,23 @@
             ]
           },
           {
+            "group": "Video Agents",
+            "pages": [
+               "api-reference/endpoint/agentgetbyid",
+              "api-reference/endpoint/agentget",
+              "api-reference/endpoint/agentcreate",
+              "api-reference/endpoint/agentupdate",
+              "api-reference/endpoint/agentdelete"
+            ]
+          },
+          {
             "group": "Tools - MCP",
             "pages": [
-               "api-reference/endpoint/getbyid",
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/update",
-              "api-reference/endpoint/delete"
+               "api-reference/endpoint/mcpgetbyid",
+              "api-reference/endpoint/mcpget",
+              "api-reference/endpoint/mcpcreate",
+              "api-reference/endpoint/mcpupdate",
+              "api-reference/endpoint/mcpdelete"
             ]
           }
         ]

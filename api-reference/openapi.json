@@ -584,6 +584,274 @@
           }
         }
       }
+    },
+    "/agent": {
+      "post": {
+        "summary": "Create Agent Configuration",
+        "description": "Create a new Trugen AI agent configuration with tools, MCP servers, and knowledge base mappings.",
+        "operationId": "createAgentConfig",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatars": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "enum": [
+                        "enabled",
+                        "disabled"
+                      ]
+                    }
+                  },
+                  "agent_name": {
+                    "type": "string"
+                  },
+                  "agent_system_prompt": {
+                    "type": "string"
+                  },
+                  "tools": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "enum": [
+                        "enabled",
+                        "disabled"
+                      ]
+                    }
+                  },
+                  "config": {
+                    "type": "object",
+                    "description": "Agent configuration parameters including LLMs, TTS, STT, MCP servers, and prompts.",
+                    "properties": {
+                      "timeout": {
+                        "type": "integer"
+                      },
+                      "avatar_data_source": {
+                        "type": "string"
+                      },
+                      "frame_rate": {
+                        "type": "integer"
+                      },
+                      "silence_padding": {
+                        "type": "number"
+                      },
+                      "is_face_enhancer_enabled": {
+                        "type": "boolean"
+                      },
+                      "persona_name": {
+                        "type": "string"
+                      },
+                      "persona_prompt": {
+                        "type": "string"
+                      },
+                      "scene_context_engine": {
+                        "type": "object",
+                        "properties": {
+                          "on_snapshot_timeout": {
+                            "type": "integer"
+                          },
+                          "vision_llm": {
+                            "type": "string"
+                          },
+                          "llm_prompts": {
+                            "type": "object"
+                          }
+                        }
+                      },
+                      "query_response_timeout": {
+                        "type": "object"
+                      },
+                      "scene_analyzer_prompt": {
+                        "type": "object"
+                      },
+                      "warning_exit_message": {
+                        "type": "object"
+                      },
+                      "exit_message": {
+                        "type": "object"
+                      },
+                      "welcome_message": {
+                        "type": "object"
+                      },
+                      "eye_mask_replacement": {
+                        "type": "boolean"
+                      },
+                      "audio_features_type": {
+                        "type": "string"
+                      },
+                      "audio_features_window_length": {
+                        "type": "integer"
+                      },
+                      "config": {
+                        "type": "object"
+                      },
+                      "knowledge_base": {
+                        "type": "object"
+                      },
+                      "mcp_servers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "tools": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  },
+                  "knowledge_base": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "tool": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "mcp": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "agent_name",
+                  "config",
+                  "is_active"
+                ]
+              },
+              "example": {
+                "avatars": {
+                  "tool1": "enabled",
+                  "tool2": "disabled"
+                },
+                "agent_name": "New Agent Config",
+                "agent_system_prompt": "You are a helpful assistant",
+                "tools": {
+                  "tool1": "enabled",
+                  "tool2": "disabled"
+                },
+                "config": {
+                  "timeout": 240,
+                  "avatar_data_source": "avatar-inference-data/",
+                  "frame_rate": 25,
+                  "silence_padding": 0.05,
+                  "is_face_enhancer_enabled": true,
+                  "persona_name": "pk_male_1",
+                  "persona_prompt": "INTERNAL VARIABLES: ...",
+                  "scene_context_engine": {
+                    "on_snapshot_timeout": 3,
+                    "vision_llm": "qwen2.5vl:7b"
+                  }
+                },
+                "is_active": true,
+                "knowledge_base": [
+                  {
+                    "id": "4a0365e4-ced5-42f0-8933-b6880a0ce044",
+                    "name": "new kb 123"
+                  },
+                  {
+                    "id": "b5a2f77a-2bbf-4cc4-8edf-1ccc90b6effd",
+                    "name": "greg"
+                  }
+                ],
+                "tool": [
+                  {
+                    "id": "0ea1fa09-4681-4068-8437-84ae6907b900",
+                    "name": "New Tool 2"
+                  }
+                ],
+                "mcp": [
+                  {
+                    "id": "86854676-1770-45d4-8820-859657c442ec",
+                    "name": "MCP 4"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Agent configuration created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "ed691a62-b62b-461f-a8d9-33195b9f7dbf",
+                  "message": "Agent configuration created successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {
