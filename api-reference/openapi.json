@@ -585,14 +585,435 @@
         }
       }
     },
-    "/agent": {
+    "/knowledgebase": {
       "post": {
-        "summary": "Create Agent Configuration",
-        "description": "Create a new Trugen AI agent configuration with tools, MCP servers, and knowledge base mappings.",
-        "operationId": "createAgentConfig",
+        "summary": "Create Knowledge Base",
+        "description": "Uploads a document or raw text to create a new Knowledge Base entry. Requires `X-API-Key` authentication.",
+        "operationId": "createKnowledgeBase",
         "security": [
           {
             "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Test 10",
+                    "description": "Name of the knowledge base."
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Test desc",
+                    "description": "Description of the knowledge base."
+                  },
+                  "is_active": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "Whether the knowledge base is active."
+                  },
+                  "input": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Document file to upload (e.g., .pdf, .docx). Optional if text is provided."
+                  },
+                  "text": {
+                    "type": "string",
+                    "example": "sample file text",
+                    "description": "Optional raw text input for the knowledge base (used if no file is uploaded)."
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "is_active"
+                ]
+              },
+              "example": {
+                "name": "Test 10",
+                "description": "Test desc",
+                "is_active": "true",
+                "input": "@/C:/temp/Resume.docx",
+                "text": "sample file text"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Knowledge Base created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "5273e435-3cbb-4a11-9ea9-2c150ba19009"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Knowledge Base created successfully"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "id": "5273e435-3cbb-4a11-9ea9-2c150ba19009",
+                  "message": "Knowledge Base created successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or file/text upload error"
+          },
+          "401": {
+            "description": "Unauthorized – invalid or missing API key"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all Knowledge Bases",
+        "description": "Fetches a list of all available knowledge bases with their metadata and associated documents. Requires `X-API-Key` authentication.",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Knowledge Base response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Test 10"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Test desc"
+                      },
+                      "is_active": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "index": {
+                        "type": "string",
+                        "example": "dg-y611apn.svc.aped-4627-b74a.pinecone.io"
+                      },
+                      "namespace": {
+                        "type": "string",
+                        "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                      },
+                      "no_of_rec": {
+                        "type": "integer",
+                        "example": 20
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-08T16:34:19.984033Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-08T16:34:19.984033Z"
+                      },
+                      "documents": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "9a2ad090-aafe-4662-8eb8-a11a404431ea"
+                            },
+                            "kb_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Resume.docx"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": ".docx"
+                            },
+                            "is_active": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "preview_url": {
+                              "type": "string",
+                              "format": "uri",
+                              "example": "https://trugen.s3.us-east-2.amazonaws.com/uploads/kb/ff152cd9-efb6-4367-a545-b861c9fbd3d0/Resume.docx"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "kb_id",
+                            "name",
+                            "type",
+                            "is_active",
+                            "preview_url"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "description",
+                      "is_active",
+                      "index",
+                      "namespace",
+                      "no_of_rec",
+                      "created_at",
+                      "updated_at",
+                      "documents"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – Invalid or missing API key"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/knowledgebase/{id}": {
+      "get": {
+        "summary": "Get Knowledge Base by ID",
+        "description": "Retrieves a specific knowledge base and its associated documents using the provided Knowledge Base ID. Requires `X-API-Key` authentication.",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID of the Knowledge Base to retrieve",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "d837afdc-f95f-4e4d-abe4-40894db22a02"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Knowledge Base retrieval",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "knowledge_base": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Test 10"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Test desc"
+                        },
+                        "is_active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "index": {
+                          "type": "string",
+                          "example": "dg-y611apn.svc.aped-4627-b74a.pinecone.io"
+                        },
+                        "namespace": {
+                          "type": "string",
+                          "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                        },
+                        "no_of_rec": {
+                          "type": "integer",
+                          "example": 20
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-10-08T16:34:19.984033Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-10-08T16:34:19.984033Z"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "is_active",
+                        "index",
+                        "namespace",
+                        "no_of_rec",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    },
+                    "documents": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "9a2ad090-aafe-4662-8eb8-a11a404431ea"
+                          },
+                          "kb_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Resume.docx"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": ".docx"
+                          },
+                          "is_active": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "preview_url": {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "https://trugen.s3.us-east-2.amazonaws.com/uploads/kb/ff152cd9-efb6-4367-a545-b861c9fbd3d0/Resume.docx"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "kb_id",
+                          "name",
+                          "type",
+                          "is_active",
+                          "preview_url"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "knowledge_base",
+                    "documents"
+                  ]
+                },
+                "example": {
+                  "documents": [
+                    {
+                      "id": "9a2ad090-aafe-4662-8eb8-a11a404431ea",
+                      "is_active": true,
+                      "kb_id": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                      "name": "Resume.docx",
+                      "preview_url": "https://trugen.s3.us-east-2.amazonaws.com/uploads/kb/ff152cd9-efb6-4367-a545-b861c9fbd3d0/Resume.docx",
+                      "type": ".docx"
+                    },
+                    {
+                      "id": "a991725c-12b3-4bee-afc2-0689111848fe",
+                      "is_active": true,
+                      "kb_id": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                      "name": "58910277-a9cd-4a34-91ad-23654843bce5.txt",
+                      "preview_url": "https://trugen.s3.us-east-2.amazonaws.com/uploads/kb/ff152cd9-efb6-4367-a545-b861c9fbd3d0/58910277-a9cd-4a34-91ad-23654843bce5.txt",
+                      "type": "text"
+                    }
+                  ],
+                  "knowledge_base": {
+                    "created_at": "2025-10-08T16:34:19.984033Z",
+                    "description": "Test desc",
+                    "id": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                    "index": "dg-y611apn.svc.aped-4627-b74a.pinecone.io",
+                    "is_active": true,
+                    "name": "Test 10",
+                    "namespace": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                    "no_of_rec": 20,
+                    "updated_at": "2025-10-08T16:34:19.984033Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Knowledge Base ID"
+          },
+          "401": {
+            "description": "Unauthorized – Missing or invalid API key"
+          },
+          "404": {
+            "description": "Knowledge Base not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Knowledge Base Configuration",
+        "description": "Updates the specified Knowledge Base configuration by ID. Requires `X-API-Key` authentication.",
+        "operationId": "updateKnowledgeBase",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID of the Knowledge Base to update",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+            }
           }
         ],
         "requestBody": {
@@ -602,224 +1023,36 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "avatars": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string",
-                      "enum": [
-                        "enabled",
-                        "disabled"
-                      ]
-                    }
+                  "name": {
+                    "type": "string",
+                    "example": "test host name"
                   },
-                  "agent_name": {
-                    "type": "string"
-                  },
-                  "agent_system_prompt": {
-                    "type": "string"
-                  },
-                  "tools": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string",
-                      "enum": [
-                        "enabled",
-                        "disabled"
-                      ]
-                    }
-                  },
-                  "config": {
-                    "type": "object",
-                    "description": "Agent configuration parameters including LLMs, TTS, STT, MCP servers, and prompts.",
-                    "properties": {
-                      "timeout": {
-                        "type": "integer"
-                      },
-                      "avatar_data_source": {
-                        "type": "string"
-                      },
-                      "frame_rate": {
-                        "type": "integer"
-                      },
-                      "silence_padding": {
-                        "type": "number"
-                      },
-                      "is_face_enhancer_enabled": {
-                        "type": "boolean"
-                      },
-                      "persona_name": {
-                        "type": "string"
-                      },
-                      "persona_prompt": {
-                        "type": "string"
-                      },
-                      "scene_context_engine": {
-                        "type": "object",
-                        "properties": {
-                          "on_snapshot_timeout": {
-                            "type": "integer"
-                          },
-                          "vision_llm": {
-                            "type": "string"
-                          },
-                          "llm_prompts": {
-                            "type": "object"
-                          }
-                        }
-                      },
-                      "query_response_timeout": {
-                        "type": "object"
-                      },
-                      "scene_analyzer_prompt": {
-                        "type": "object"
-                      },
-                      "warning_exit_message": {
-                        "type": "object"
-                      },
-                      "exit_message": {
-                        "type": "object"
-                      },
-                      "welcome_message": {
-                        "type": "object"
-                      },
-                      "eye_mask_replacement": {
-                        "type": "boolean"
-                      },
-                      "audio_features_type": {
-                        "type": "string"
-                      },
-                      "audio_features_window_length": {
-                        "type": "integer"
-                      },
-                      "config": {
-                        "type": "object"
-                      },
-                      "knowledge_base": {
-                        "type": "object"
-                      },
-                      "mcp_servers": {
-                        "type": "array",
-                        "items": {
-                          "type": "object"
-                        }
-                      },
-                      "tools": {
-                        "type": "array",
-                        "items": {
-                          "type": "object"
-                        }
-                      }
-                    }
+                  "description": {
+                    "type": "string",
+                    "example": "You are a helpful assistant and testing"
                   },
                   "is_active": {
-                    "type": "boolean"
-                  },
-                  "knowledge_base": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  },
-                  "tool": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  },
-                  "mcp": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      }
-                    }
+                    "type": "boolean",
+                    "example": true
                   }
                 },
                 "required": [
-                  "agent_name",
-                  "config",
+                  "name",
+                  "description",
                   "is_active"
                 ]
               },
               "example": {
-                "avatars": {
-                  "tool1": "enabled",
-                  "tool2": "disabled"
-                },
-                "agent_name": "New Agent Config",
-                "agent_system_prompt": "You are a helpful assistant",
-                "tools": {
-                  "tool1": "enabled",
-                  "tool2": "disabled"
-                },
-                "config": {
-                  "timeout": 240,
-                  "avatar_data_source": "avatar-inference-data/",
-                  "frame_rate": 25,
-                  "silence_padding": 0.05,
-                  "is_face_enhancer_enabled": true,
-                  "persona_name": "pk_male_1",
-                  "persona_prompt": "INTERNAL VARIABLES: ...",
-                  "scene_context_engine": {
-                    "on_snapshot_timeout": 3,
-                    "vision_llm": "qwen2.5vl:7b"
-                  }
-                },
-                "is_active": true,
-                "knowledge_base": [
-                  {
-                    "id": "4a0365e4-ced5-42f0-8933-b6880a0ce044",
-                    "name": "new kb 123"
-                  },
-                  {
-                    "id": "b5a2f77a-2bbf-4cc4-8edf-1ccc90b6effd",
-                    "name": "greg"
-                  }
-                ],
-                "tool": [
-                  {
-                    "id": "0ea1fa09-4681-4068-8437-84ae6907b900",
-                    "name": "New Tool 2"
-                  }
-                ],
-                "mcp": [
-                  {
-                    "id": "86854676-1770-45d4-8820-859657c442ec",
-                    "name": "MCP 4"
-                  }
-                ]
+                "name": "test host name",
+                "description": "You are a helpful assistant and testing",
+                "is_active": true
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Agent configuration created successfully",
+          "200": {
+            "description": "Knowledge Base updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -827,16 +1060,22 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "format": "uuid"
+                      "format": "uuid",
+                      "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Knowledge Base configuration updated successfully"
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "message"
+                  ]
                 },
                 "example": {
-                  "id": "ed691a62-b62b-461f-a8d9-33195b9f7dbf",
-                  "message": "Agent configuration created successfully"
+                  "id": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                  "message": "Knowledge Base configuration updated successfully"
                 }
               }
             }
@@ -845,7 +1084,237 @@
             "description": "Invalid request body"
           },
           "401": {
-            "description": "Unauthorized - Missing or invalid API key"
+            "description": "Unauthorized – Missing or invalid API key"
+          },
+          "404": {
+            "description": "Knowledge Base not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Knowledge Base Configuration",
+        "description": "Deletes a Knowledge Base configuration by ID. Requires `X-API-Key` authentication.",
+        "operationId": "deleteKnowledgeBase",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID of the Knowledge Base to delete",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Knowledge Base deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "ff152cd9-efb6-4367-a545-b861c9fbd3d0"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Knowledge base configuration deleted successfully"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "id": "ff152cd9-efb6-4367-a545-b861c9fbd3d0",
+                  "message": "Knowledge base configuration deleted successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – Missing or invalid API key"
+          },
+          "404": {
+            "description": "Knowledge Base not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/knowledgebase/{id}/doc": {
+      "post": {
+        "summary": "Add Content to Existing Knowledge Base",
+        "description": "Uploads additional content or a document to an existing Knowledge Base. Requires `X-API-Key` authentication.",
+        "operationId": "addKnowledgeBaseDocument",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID of the Knowledge Base to which the content will be added",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "d837afdc-f95f-4e4d-abe4-40894db22a02"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "Text or URL content to be added to the Knowledge Base",
+                    "example": "https://example.com/"
+                  },
+                  "input": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Optional file upload (e.g., .pdf, .docx)"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Content added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "kb_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "d837afdc-f95f-4e4d-abe4-40894db22a02"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Content added successfully to existing Knowledge Base"
+                    }
+                  },
+                  "required": [
+                    "added",
+                    "kb_id",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "added": 1,
+                  "kb_id": "d837afdc-f95f-4e4d-abe4-40894db22a02",
+                  "message": "Content added successfully to existing Knowledge Base"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized – Invalid or missing API key"
+          },
+          "404": {
+            "description": "Knowledge Base not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/knowledgebase/doc/{id}": {
+      "delete": {
+        "summary": "Delete a Document from Knowledge Base",
+        "description": "Deletes a specific document from an existing Knowledge Base using its document ID.",
+        "operationId": "deleteKnowledgeBaseDocument",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID of the document to be deleted",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "0ebaba9d-2221-46bc-a3b4-b013252e49be"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "0ebaba9d-2221-46bc-a3b4-b013252e49be"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Document deleted successfully"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "id": "0ebaba9d-2221-46bc-a3b4-b013252e49be",
+                  "message": "Document deleted successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – Invalid or missing API key"
+          },
+          "404": {
+            "description": "Document not found"
           },
           "500": {
             "description": "Internal server error"

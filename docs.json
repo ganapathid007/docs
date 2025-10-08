@@ -44,19 +44,21 @@
             ]
           },
           {
-            "group": "Video Agents",
+            "group": "Knowledge Base",
             "pages": [
-               "api-reference/endpoint/agentgetbyid",
-              "api-reference/endpoint/agentget",
-              "api-reference/endpoint/agentcreate",
-              "api-reference/endpoint/agentupdate",
-              "api-reference/endpoint/agentdelete"
+              "api-reference/endpoint/knowledgebasegetbyid",
+              "api-reference/endpoint/knowledgebaseget",
+              "api-reference/endpoint/knowledgebasecreate",
+              "api-reference/endpoint/knowledgebaseadddoc",
+              "api-reference/endpoint/knowledgebaseupdate",
+              "api-reference/endpoint/knowledgebasedelete",
+              "api-reference/endpoint/knowledgebasedeletedoc"
             ]
           },
           {
             "group": "Tools - MCP",
             "pages": [
-               "api-reference/endpoint/mcpgetbyid",
+              "api-reference/endpoint/mcpgetbyid",
               "api-reference/endpoint/mcpget",
               "api-reference/endpoint/mcpcreate",
               "api-reference/endpoint/mcpupdate",
